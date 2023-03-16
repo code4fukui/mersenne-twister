@@ -207,4 +207,4 @@ MersenneTwister.prototype.random_long = function() {
 
 /* These real versions are due to Isaku Wada, 2002/01/09 added */
 
-module.exports = MersenneTwister;
+export default MersenneTwister;
