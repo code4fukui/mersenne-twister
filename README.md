@@ -1,56 +1,90 @@
-## Pseudorandom number generator [![Build Status](https://travis-ci.org/boo1ean/mersenne-twister.png?branch=master)](https://travis-ci.org/boo1ean/mersenne-twister)
+# Mersenne Twister
 
-Mersenne Twister pseudorandom number generator.
+[
+![npm version](https://badge.fury.io/js/mersenne-twister.svg)
+](https://badge.fury.io/js/mersenne-twister)
 
-[Origin source](https://gist.github.com/banksean/300494) (generator interface was changed)
+A JavaScript implementation of the Mersenne Twister MT19937 pseudorandom number generator.
 
-Algorithm - http://en.wikipedia.org/wiki/Mersenne_twister
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+
+## Features
+
+-   Generates pseudorandom numbers with a period of 2¹⁹⁹³⁷-1.
+-   Supports seeding with a number or an array for repeatable sequences.
+-   Provides multiple methods for different intervals and resolutions.
+-   Works in both Node.js and browser environments.
 
 ## Installation
 
-    $ npm install mersenne-twister
+```bash
+npm install mersenne-twister
+```
 
 ## Usage
 
+**CommonJS (Node.js)**
+
 ```javascript
-var MersenneTwister = require('mersenne-twister');
-var generator = new MersenneTwister();
+const MersenneTwister = require('mersenne-twister');
+const generator = new MersenneTwister();
 
-// Generates a random number on [0,1) real interval (same interval as Math.random)
-generator.random();
+// Generate a random number on [0,1)
+const randomNumber = generator.random();
+```
 
-// [0, 4294967295]
-generator.random_int();
+**ES Modules**
 
-// [0,1]
-generator.random_incl();
+```javascript
+import MersenneTwister from 'mersenne-twister';
+const generator = new MersenneTwister();
 
-// (0,1)
-generator.random_excl();
-
-// [0,1) with 53-bit resolution
-generator.random_long();
-
-// [0, 2147483647]
-generator.random_int31();
+// Generate a random number on [0,1)
+const randomNumber = generator.random();
 ```
 
 ## Seeding
 
-If you want to use a specific seed in order to get a repeatable random sequence, pass an integer into the constructor:
+For reproducible sequences of random numbers, you can provide a seed to the generator. If no seed is provided, the generator is seeded with the current timestamp.
+
+### Seed with a Number
+
+Pass an integer to the constructor or the `init_seed` method.
 
 ```javascript
-var generator = new MersenneTwister(123);
-``` 
+// Seed during instantiation
+const generator = new MersenneTwister(123);
 
-and that will always produce the same random sequence.
-
-Also you can do it on existing generator instance:
-
-```javascript
-generator.init_seed(123);
+// Or seed an existing instance
+generator.init_seed(456);
 ```
+
+Generators initialized with the same seed will produce the exact same sequence of numbers.
+
+### Seed with an Array
+
+The generator can also be seeded with an array of numbers. This method is compatible with the seeding behavior of other implementations, such as Python's `random` module.
+
+```javascript
+const seedArray = [0, 42, 1337];
+const generator = new MersenneTwister(seedArray);
+```
+
+## API Methods
+
+An instance of `MersenneTwister` has the following methods:
+
+-   `random()`: Returns a random float in the interval `[0, 1)`. This is the most common method and is equivalent to `Math.random()`.
+-   `random_int()`: Returns a random 32-bit integer in the interval `[0, 4294967295]`.
+-   `random_incl()`: Returns a random float in the interval `[0, 1]`. (Inclusive of 1.0).
+-   `random_excl()`: Returns a random float in the interval `(0, 1)`. (Exclusive of 0.0 and 1.0).
+-   `random_long()`: Returns a random float in the interval `[0, 1)` with 53-bit resolution for higher precision.
+-   `random_int31()`: Returns a random 31-bit integer in the interval `[0, 2147483647]`.
+
+## Credits
+
+This code is based on the original C-program for MT19937 by Makoto Matsumoto and Takuji Nishimura. The JavaScript adaptation was originally created by Sean McCullough.
 
 ## License
 
-See source
+MIT License — see [LICENSE](LICENSE).
